@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
   <head>
     <title>an introduction to databases</title>
     <meta charset="utf-8" />
-    <meta name="date" content="2019-03-15" />
     <link href="libs/remark-css/default.css" rel="stylesheet" />
     <link rel="stylesheet" href="assets/my-theme.css" type="text/css" />
     <link rel="stylesheet" href="libs/remark-css/default-fonts.css" type="text/css" />
@@ -13,7 +12,7 @@
 class: center, middle, inverse, title-slide
 
 # an introduction to databases
-### 2019-03-15
+### spring 2020
 
 ---
 
@@ -23,9 +22,8 @@ class: center, middle, inverse, title-slide
 #### objectives
 
 * a practical introduction to databases
-
-* demystify databases
-
+  + demystify databases
+  
 * focus on data structure 
 
 ---
@@ -69,12 +67,14 @@ class: center, middle, inverse, title-slide
 - commercial
   + Oracle
   + Microsoft SQL Server
-  + ...
+  + Amazon
+  + others...
+  
 - open-source
   + MySQL
   + PostgreSQL
   + SQLite
-  + ...
+  + others...
   
 .footnote[[BST 260: Introduction to Data Science](https://datasciencelabs.github.io/)]
 
@@ -118,15 +118,6 @@ class: center, middle, inverse, title-slide
 ]
 
 .footnote[[Foreign Keys - Intro to Relational Databases (Udacity)](https://www.youtube.com/watch?reload=9&amp;v=fnbLMcd0FGQ)]
-
-
----
-
-#### McDowell Sonoran Preserve arthropod taxonomy
-
-.center[
-  ![tres_rios_db_structure](assets/figures/arthropod-taxonomy.png)
-]
 
 
 ---
@@ -302,9 +293,35 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
     deleted = true;
   });
-})();</script>
-
-<script>
+})();
+(function() {
+  "use strict"
+  /* Replace <script> tags in slides area to make them executable
+   *
+   * Runs after post-processing of markdown source into slides and replaces only
+   * <script>s on the last slide of continued slides using the .has-continuation
+   * class added by xaringan. Finally, any <script>s in the slides area that
+   * aren't executed are commented out.
+   */
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container:not(.has-continuation) script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+  var scriptsNotExecuted = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container.has-continuation script'
+  );
+  if (!scriptsNotExecuted.length) return;
+  for (var i = 0; i < scriptsNotExecuted.length; i++) {
+    var comment = document.createComment(scriptsNotExecuted[i].outerHTML)
+    scriptsNotExecuted[i].parentElement.replaceChild(comment, scriptsNotExecuted[i])
+  }
+})();
 (function() {
   var links = document.getElementsByTagName('a');
   for (var i = 0; i < links.length; i++) {
@@ -313,7 +330,23 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     }
   }
 })();
-</script>
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
 slideshow._releaseMath = function(el) {

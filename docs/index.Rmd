@@ -2,7 +2,7 @@
 title: "an introduction to databases"
 subtitle: false
 author: false
-date: "2019-03-15"
+date: "spring 2020"
 output:
   xaringan::moon_reader:
     lib_dir: libs
@@ -20,9 +20,8 @@ options(htmltools.dir.version = FALSE)
 #### objectives
 
 * a practical introduction to databases
-
-* demystify databases
-
+  + demystify databases
+  
 * focus on data structure 
 
 ---
@@ -66,12 +65,14 @@ options(htmltools.dir.version = FALSE)
 - commercial
   + Oracle
   + Microsoft SQL Server
-  + ...
+  + Amazon
+  + others...
+  
 - open-source
   + MySQL
   + PostgreSQL
   + SQLite
-  + ...
+  + others...
   
 .footnote[[BST 260: Introduction to Data Science](https://datasciencelabs.github.io/)]
 
@@ -115,15 +116,6 @@ options(htmltools.dir.version = FALSE)
 ]
 
 .footnote[[Foreign Keys - Intro to Relational Databases (Udacity)](https://www.youtube.com/watch?reload=9&v=fnbLMcd0FGQ)]
-
-
----
-
-#### McDowell Sonoran Preserve arthropod taxonomy
-
-.center[
-  ![tres_rios_db_structure](assets/figures/arthropod-taxonomy.png)
-]
 
 
 ---
