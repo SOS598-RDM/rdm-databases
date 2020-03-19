@@ -246,3 +246,19 @@ options(htmltools.dir.version = FALSE)
   ![tres_rios_db_structure](assets/figures/simple_tres_rios_db_structure-water-quality.png)
 ]
 
+---
+
+#### urban Chiroptera: workflow
+
+.center[
+  ![urban-chiroptera-workflow](assets/figures/urban-chiroptera-workflow.png)
+]
+
+
+---
+
+#### urban Chiroptera: schema
+
+.center[
+  ![urban-chiroptera-schema](assets/figures/urban-chiroptera-schema.png)
+]
