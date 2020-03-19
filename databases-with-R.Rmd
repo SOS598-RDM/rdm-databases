@@ -7,7 +7,10 @@ editor_options:
 
 ## background
 
-This document generally mirrors the SOS 598 RDM [introduction to databases](https://github.com/SOS598-RDM/rdm-databases) resource but adapts the workflow to R. Please see the aforementioned document for background and details.
+This document generally mirrors the SOS 598 RDM [introduction to
+databases](https://github.com/SOS598-RDM/rdm-databases) resource but adapts the
+workflow to R. Please see the aforementioned document for background and
+details.
 
 ## load required libraries
 
@@ -45,7 +48,19 @@ dbExecute(con, 'PRAGMA foreign_keys = ON;')
 
 #### sonde events
 
-With DB Browser, we were able to use an import wizard to create the *sonde_events* table and import the data in a single action, with a subsequent step of adding the NOT NULL, PRIMARY KEY, and AUTOINCREMENT characteristics to the 'id' field of our table with DB Browser's modify table tool. However, functionality for modifying tables after they are created is limited with SQLite, particularly outside of a GUI environment like DB Browser. A better approach, and one that we need to use with R, is to set these features when the table is created. So, instead of a creating the table by importing them, we will pass an SQL statement to create the table with the appropriate characteristics, then insert the data with a separate SQL statement. We can use the dbWriteTable function to crudely but quickly load the sonde event data into a temporary table, then insert them from the temporary table to the *sonde_events table* with the appropriate formatting and structure.
+With DB Browser, we were able to use an import wizard to create the
+`sonde_events` table and import the data in a single action with a subsequent
+step of adding the NOT NULL, PRIMARY KEY, and AUTOINCREMENT characteristics to
+the 'id' field of our table with DB Browser's modify table tool. However,
+functionality for modifying tables after they are created is limited with
+SQLite, particularly outside of a GUI environment like DB Browser. A better
+approach, and one that we need to use with R, is to set these features when the
+table is created. So, instead of a creating the table by importing them, we will
+pass an SQL statement to create the table with the appropriate characteristics,
+then insert the data with a separate SQL statement. We can use the dbWriteTable
+function to crudely but quickly load the sonde event data into a temporary
+table, then insert them from the temporary table to the `sonde_events table`
+with the appropriate formatting and structure.
 
 create our sonde events table
 
@@ -55,7 +70,7 @@ dbExecute(con,'
 CREATE TABLE `sonde_events` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	`site_id`	TEXT,
-	`date`	TEXT,
+	`date` TEXT,
 	`instrument_id`	TEXT,
 	`K2_20`	REAL);')
 ```
@@ -105,17 +120,22 @@ create our sonde data table:
 
 dbExecute(con,'
 CREATE TABLE "sonde_data" (
-  "id" INTEGER PRIMARY KEY  AUTOINCREMENT NOT NULL,
   "sonde_event_id" INTEGER NOT NULL,
-  "Date" TEXT,
-  "Time" TEXT,
+  "Date" TEXT NOT NULL,
+  "Time" TEXT NOT NULL,
   "Temp" DOUBLE,
-  "SpCond" DOUBLE,
-  "DO" DOUBLE,
-FOREIGN KEY ("sonde_event_id") REFERENCES sonde_events("id"));')
+  "SpCond" REAL,
+  "DO" REAL,
+  PRIMARY KEY ("sonde_event_id", "Date", "Time")
+  FOREIGN KEY ("sonde_event_id") REFERENCES sonde_events("id")
+);')
 ```
 
-We need to add the sonde data to our database. However, because we are now in a scripting environment, we can develop tools and approaches to automate some of these processes. For example, we can start with a function that will add data to our sonde data table. This function adds data specifically to the *sonde_data* table but we could add a parameter that would allow us to select any table.
+We need to add the sonde data to our database. However, because we are now in a
+scripting environment, we can develop tools and approaches to automate some of
+these processes. For example, we can start with a function that will add data to
+our `sonde_data` table. This function adds data specifically to the `sonde_data`
+table but we could add a parameter that would allow us to select any table.
 
 ```{r read_insert_helper_function}
 
@@ -157,7 +177,8 @@ dataFiles <- list('data/sonde_data_1_3.csv',
 lapply(dataFiles, tempTableData, overWrite = FALSE)
 ```
 
-insert the data into the sonde_data table by selecting the data inserted into the temporary table:
+insert the data into the sonde_data table by selecting the data inserted into
+the temporary table:
 
 ```{r dbi::insert_sonde_data}
 
@@ -179,7 +200,8 @@ dbExecute(con, '
           FROM tempTable;')
 ```
 
-Since there is not a sonde event 5 in our *sonde_events* table, we need to add it before we can load event 5 data into the sonde_data table.
+Since there is not a sonde event 5 in our `sonde_events` table, we need to add
+it before we can load event 5 data into the sonde_data table.
 
 ```{r add_sonde_event_five}
 
@@ -191,13 +213,15 @@ INSERT INTO sonde_events(
   K2_20)
 VALUES(
   "HN",
-  "2013-08-13",
+  "2020-03-20",
   "yellow",
   55.42
 );')
 ```
 
-Now that there is an event 5 in our *sonde_events* table, we can add data from sonde event 5 to our *sonde_data* table. This chunk will load the event 5 sonde data into our temporary table.
+Now that there is an event 5 in our `sonde_events` table, we can add data from
+sonde event 5 to our `sonde_data` table. This chunk will load the event 5 sonde
+data into our temporary table.
 
 ```{r dbi::load_sonde_data_5}
 
@@ -206,7 +230,9 @@ dataFiles <- list('data/sonde_data_5.csv')
 lapply(dataFiles, tempTableData, overWrite = TRUE)
 ```
 
-I can then insert the data into the sonde_data table from the temporary table simply by referencing the chunk that we employed earlier for this purpose.
+I can then insert the data into the `sonde_data table` from the temporary table
+by rerunning the code in the `dbi::insert_sonde_data` chunk that we employed
+earlier for this purpose.
 
 > {r dbi::insert_sonde_data_5, ref.label='dbi::insert_sonde_data'}
 
@@ -216,9 +242,12 @@ I can then insert the data into the sonde_data table from the temporary table si
 
 ## extract data from the database
 
-There are several approaches that we can employ to access data in our database. One is to use SQL statements as we have done to create and populate our database. Another is to use dplyr/dbplyr functionality so that we can access the data using dplyr syntax, which it will convert to SQL for us.
+There are several approaches that we can employ to access data in our database.
+One is to use SQL statements as we have done to create and populate our
+database. Another is to use dplyr/dbplyr functionality so that we can access the
+data using dplyr syntax, which it will convert to SQL for us.
 
-get the first ten rows from the *sonde_data* table with SQL:
+get the first ten rows from the `sonde_data` table with SQL:
 
 ```{r sonde_data_head}
 dbGetQuery(con, '
@@ -238,16 +267,17 @@ LIMIT 10;')
 
 with dplyr:
 
-create a pointer to the *sonde_events* table in our database
+create a pointer to the `sonde_events` table in our database
 
 ```{r sonde_events_db}
 
 event_db <- tbl(con, "sonde_events")
 ```
 
-we can then access the information in the *sonde_events* table by referencing the pointer
+we can then access the information in the `sonde_events` table by referencing
+the pointer
 
-use the show_query() function to transate the dplyr statement to SQL
+use the `show_query()` function to transate the dplyr statement to SQL
 
 ```{r sonde_events_select_show_query}
 
@@ -256,7 +286,7 @@ event_db %>%
   show_query()
 ```
 
-example: select all data from the *sonde_events* table
+example: select all data from the `sonde_events` table
 
 ```{r sonde_events_select_all}
 
@@ -264,7 +294,8 @@ event_db %>%
   select(everything())
 ```
 
-example: assign results of select all data from the *sonde_events* table to an object in our R environment
+example: assign results of select all data from the `sonde_events` table to an
+object in our R environment
 
 ```{r sonde_events_select_all_assignment}
 
@@ -273,7 +304,9 @@ sondeevent <- event_db %>%
   collect()
 ```
 
-Usually we want to use certain search criteria. Note the difference between the SQL and dplyr syntax to harvest the Date and DO fields from the *sonde_data* table that were collected on the 15th of August.
+Usually we want to use certain search criteria. Note the difference between the
+SQL and dplyr syntax to harvest the Date and DO fields from the `sonde_data`
+table that were collected on the 15th of August.
 
 *SQL*
 
@@ -305,7 +338,9 @@ sondedata_db %>%
   head(n = 10)
 ```
 
-We can group results based on data features that can be binned, this is particularly useful for aggregate functions. The query below extracts the minimum and maximum dissolved oxygen (DO) values for each sonde event.
+We can group results based on data features that can be binned, this is
+particularly useful for aggregate functions. The query below extracts the
+minimum and maximum dissolved oxygen (DO) values for each sonde event.
 
 ```{r sonde_data_grouping}
 
@@ -318,9 +353,11 @@ sondedata_db %>%
   ) 
 ```
 
-The ability to link information in our tables is a core features of databases. We do this with **JOINs**.
+The ability to link information in our tables is a core features of databases.
+We do this with **JOINs**.
 
-For example, incorporate site_id from the *sonde_events* table into a query of temperature and dissolved oxygen from *sonde_data*:
+For example, incorporate site_id from the `sonde_events` table into a query of
+temperature and dissolved oxygen from `sonde_data`:
 
 ```{r inner_join}
 
@@ -331,7 +368,9 @@ sondedata_db %>%
   head(n = 10)
 ```
 
-For example, find the minimum and maximum dissolved oxgyen values for each sonde_event as per above but this time include the site and the K2_20 from the sonde_events table:
+For example, find the minimum and maximum dissolved oxgyen values for each
+sonde_event as per above but this time include the site and the K2_20 from the
+sonde_events table:
 
 ```{r inner_jon_aggregation}
 
@@ -351,13 +390,13 @@ join the sonde data and sonde events data using the sonde_event_id:
 
 ```{r join_with_key, message=FALSE}
 
-read_csv('data/sonde_data_1_3.csv') %>% 
-  select(-id) %>% 
-  inner_join(read_csv('data/sonde_events.csv') %>% select(-date), by = c("sonde_event_id" = "id")) %>% 
+read_csv(file = 'data/sonde_data_1_3.csv') %>% 
+  inner_join(read_csv(file = 'data/sonde_events.csv') %>% select(-date), by = c("sonde_event_id" = "id")) %>% 
   View("joinWithKey")
 ```
 
-further, we do not really need a key, but we need to store more information in our tables without it:
+further, we do not really need a key, but we need to store more information in
+our tables without it:
 
 ```{r join_sans_key, message=FALSE}
 
@@ -370,7 +409,6 @@ read_csv('data/sonde_data_1_3.csv') %>%
                               sonde_event_id == 2 ~ 'red',
                               sonde_event_id == 3 ~ 'green')
   ) %>% 
-  select(-id) %>% 
   inner_join(read_csv('data/sonde_events.csv') %>% select(-date), by = c("site_id", "instrument_id")) %>% 
   View('joinSansKey')
 ```
