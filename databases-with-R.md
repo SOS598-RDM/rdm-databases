@@ -241,10 +241,10 @@ INSERT INTO sonde_events(
   instrument_id,
   K2_20)
 VALUES(
-  "HN",
+  "new site",
   "2020-03-20",
   "yellow",
-  55.42
+  60.42
 );')
 ```
 
@@ -371,13 +371,13 @@ event_db %>%
 
     ## # Source:   lazy query [?? x 5]
     ## # Database: sqlite 3.30.1 [/home/srearl/Desktop/stream-metabolism-R.sqlite]
-    ##      id site_id date       instrument_id K2_20
-    ##   <int> <chr>   <chr>      <chr>         <dbl>
-    ## 1     1 GB      2013-08-13 black          57.4
-    ## 2     2 GB      2013-08-13 red            57.4
-    ## 3     3 SC      2013-09-03 green          63.3
-    ## 4     4 SC      2013-09-10 black          59.1
-    ## 5     5 HN      2020-03-20 yellow         55.4
+    ##      id site_id  date       instrument_id K2_20
+    ##   <int> <chr>    <chr>      <chr>         <dbl>
+    ## 1     1 GB       2013-08-13 black          57.4
+    ## 2     2 GB       2013-08-13 red            57.4
+    ## 3     3 SC       2013-09-03 green          63.3
+    ## 4     4 SC       2013-09-10 black          59.1
+    ## 5     5 new site 2020-03-20 yellow         60.4
 
 example: assign results of select all data from the `sonde_events` table
 to an object in our R environment
@@ -516,13 +516,13 @@ sondedata_db %>%
 
     ## # Source:   lazy query [?? x 4]
     ## # Database: sqlite 3.30.1 [/home/srearl/Desktop/stream-metabolism-R.sqlite]
-    ##   sonde_event_id min_DO max_DO site_id
-    ##            <int>  <dbl>  <dbl> <chr>  
-    ## 1              1   7.12   9.06 GB     
-    ## 2              2   6.32   9.02 GB     
-    ## 3              3   6.65   8.29 SC     
-    ## 4              4   8.14   9.52 SC     
-    ## 5              5   8.14   9.52 HN
+    ##   sonde_event_id min_DO max_DO site_id 
+    ##            <int>  <dbl>  <dbl> <chr>   
+    ## 1              1   7.12   9.06 GB      
+    ## 2              2   6.32   9.02 GB      
+    ## 3              3   6.65   8.29 SC      
+    ## 4              4   8.14   9.52 SC      
+    ## 5              5   8.14   9.52 new site
 
 ## databases? eh, whatevs
 

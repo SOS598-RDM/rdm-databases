@@ -212,10 +212,10 @@ INSERT INTO sonde_events(
   instrument_id,
   K2_20)
 VALUES(
-  "HN",
+  "new site",
   "2020-03-20",
   "yellow",
-  55.42
+  60.42
 );')
 ```
 
