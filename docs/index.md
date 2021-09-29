@@ -13,9 +13,7 @@ output:
       countIncrementalSlides: false
 ---
 
-```{r setup, include=FALSE}
-options(htmltools.dir.version = FALSE)
-```
+
 
 #### objectives
 
@@ -48,6 +46,31 @@ options(htmltools.dir.version = FALSE)
 
 ---
 
+#### terminology: the language of databases
+
+.left-column[
+text
+]
+
+.right-column[
+text
+]
+
+
+---
+
+#### terminology: the language of databases
+
+- SQL (Structured Query Language): language designed to interact with RDBMS
+
+.center[
+  ![sql](assets/figures/SQL-CASE-WHEN-2.png)
+]
+
+.footnote[http://razorsql.com]
+
+---
+
 #### RDBMS software solutions
 
 - commercial
@@ -68,7 +91,7 @@ options(htmltools.dir.version = FALSE)
 
 #### SQLite
   
-- file-based, not client-server - the entire DB can live in a folder
+- file-based, not client-server DB - the whole DB can live in a folder
 
 - requires little configuration
 
@@ -114,47 +137,7 @@ options(htmltools.dir.version = FALSE)
   <img src="assets/figures/entity-relationship-diagram.png" width="90%">
 ]
 
-.footnote[[Zimmerman 2016](https://datacarpentry.org/blog/2016/12/hand-crafted-databases)]
-
-
----
-
-#### terminology: the language of databases
-
-- SQL (Structured Query Language): language designed to interact with RDBMS
-
-.pull-left[
-*data in*...  
-.light-blue[
-**INSERT** INTO my table  
-(  
-&nbsp;&nbsp;variable,  
-&nbsp;&nbsp;variable  
-)  
-**VALUES**(  
-&nbsp;&nbsp;value1,  
-&nbsp;&nbsp;value2  
-);
-]]
-
-.pull-right[
-*data out*...  
-.light-blue[
-**SELECT**  
-&nbsp;&nbsp;variable,  
-&nbsp;&nbsp;variable  
-**FROM**  
-&nbsp;&nbsp; my table  
-**WHERE**  
-&nbsp;&nbsp;variable has this feature;
-]]
-
-<br>
-<br>
-
-.center[
-**CREATE, INSERT, SELECT, UPDATE, DELETE, JOIN**
-]
+.footnote[Hand-crafted relational databases for fun and science, Naupaka Zimmerman, Data Carpentry, 2016-12-05]
 
 
 ---
@@ -273,3 +256,24 @@ options(htmltools.dir.version = FALSE)
 .center[
   ![tres_rios_db_structure](assets/figures/simple_tres_rios_db_structure-water-quality.png)
 ]
+
+<!--
+
+---
+
+#### urban Chiroptera: workflow
+
+.center[
+  ![urban-chiroptera-workflow](assets/figures/urban-chiroptera-workflow.png)
+]
+
+
+---
+
+#### urban Chiroptera: schema
+
+.center[
+  ![urban-chiroptera-schema](assets/figures/urban-chiroptera-schema.png)
+]
+
+-->
